@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="../img/logo.png" type="png"/>
+    <link rel="icon" href="img/logo.png" type="png"/>
     <title>AJAX MySQL Example</title>
    
     <link rel="stylesheet" href="styles.css">
@@ -70,35 +70,43 @@
         }
      
 
-        function renderOrders() {
-            const orderList = document.getElementById('orderList');
-            orderList.innerHTML = '';
-            orders.forEach((order, index) => {
-                const orderBox = document.createElement('div');
-                orderBox.className = 'order-box';
-                orderBox.id = order.id;
-                orderBox.tabIndex = 0;
-                orderBox.innerHTML = `
-                    <div class="order-header">${order.cliente}</div>
-                    <div class="order-count">${order.cuenta}</div>
-                  
-                    <div class="order-details">${order.producto}</div>
-                    <div class="order-time">${formatTime(0)}</div>
-                `;
-                orderBox.addEventListener('keydown', (event) => handleKeydown(event, index));
-                orderList.appendChild(orderBox);
-            });
+    function renderOrders() {
+    addOrderNumbering(); // Numerar pedidos antes de renderizar
+    const orderList = document.getElementById('orderList');
+    orderList.innerHTML = '';
 
-            // Añadir orden fantasma
-    const phantomOrder = document.createElement('div');
+    orders.forEach((order, index) => {
+        const orderBox = document.createElement('div');
+        orderBox.className = 'order-box';
+        orderBox.id = order.id;
+        orderBox.tabIndex = 0;
+        orderBox.innerHTML = `
+            <div class="order-header">${order.cliente}</div>
+            <div class="order-count">${order.cuenta}</div>
+            <div class="order-details">${order.producto}</div>
+            <div class="order-progress">Pedido ${order.currentOrder} de ${order.totalOrders}</div>
+            <div class="order-time">${formatTime(0)}</div>
+        `;
+        orderBox.addEventListener('keydown', (event) => handleKeydown(event, index));
+        orderList.appendChild(orderBox);
+    });
+
+    const phantomOrder = document.getElementById('phantom-order') || document.createElement('div');
     phantomOrder.className = 'order-box phantom-order';
     phantomOrder.id = 'phantom-order';
-    phantomOrder.tabIndex = 0;
-    phantomOrder.style.display = 'none'; // Hacerlo invisible
+    phantomOrder.tabIndex = -1;
+    phantomOrder.style.display = orders.length === 0 ? 'block' : 'none';
+    phantomOrder.textContent = 'Sin órdenes';
     orderList.appendChild(phantomOrder);
 
-            focusOrder(selectedOrderIndex);
-        }
+    if (orders.length === 0) {
+        phantomOrder.focus();
+    } else {
+        focusOrder(selectedOrderIndex);
+    }
+}
+
+
 
         function handleKeydown(event, index) {
             if (event.key === 'Delete') {
@@ -117,74 +125,54 @@
         }
 
 
-        function deleteOrder(index) {
-    const order = orders.splice(index,1)[0];
+function deleteOrder(index) {
+    const order = orders.splice(index, 1)[0];
     deletedOrders.push(order);
-    // if (deletedOrders.length > 5) {
-    //     deletedOrders.shift();
-    // }
     $.ajax({
         url: 'deleteOrder.php',
         type: 'POST',
         data: { id: order.id },
         success: function(response) {
-            console.log('Order moved to deleted_orders and removed from ordenes:', response);
-            renderOrders(); // Renderizar los pedidos nuevamente después de eliminar
-            
-            
-         
-            // if ( index >= orders.length ) {
-            //     selectedOrderIndex = orders.length + 1; // Si se eliminó el último elemento, enfocar en el nuevo último elemento
-            // } else {
-            //     selectedOrderIndex = index ; // Enfocar en el mismo índice si es posible
-            // }
-            if ( index > orders.length ){
-            focusOrder(0); // Enfocar en el pedido seleccionado después de eliminar
-   
-                //focusOrder(1);
-            }
-            updateOrderCount();
-           if (orders.length === 0) {
+            console.log('Order moved to deleted_orders:', response);
+            renderOrders();
+            if (orders.length === 0) {
                 document.getElementById('phantom-order').focus();
             } else {
                 selectedOrderIndex = Math.min(index, orders.length - 1);
                 focusOrder(selectedOrderIndex);
             }
-           
+            updateOrderCount();
         },
         error: function(xhr, status, error) {
             console.error('Error:', error);
         }
     });
 }
+
      
 
-        function undoDelete() {
-            if (deletedOrders.length > 0) {
-                const lastDeletedOrder = deletedOrders.pop();
-                orders.unshift(lastDeletedOrder);
-                $.ajax({
-                    url: 'restoreOrder.php',
-                    type: 'POST',
-                    data: { id: lastDeletedOrder.id },
-                    success: function(response) {
-                        console.log('Order restored from deleted_orders to ordenes:', response);
-                        renderOrders(); // Renderizar los pedidos nuevamente después de restaurar
-                        
-                selectedOrderIndex = 0; // Ajustar el índice seleccionado al primer pedido restaurado
-                focusOrder(selectedOrderIndex); // Enfocar en el pedido restaurado
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error:', error);
-                    }
-                });
-                updateOrderCount();
+     function undoDelete() {
+    if (deletedOrders.length > 0) {
+        const lastDeletedOrder = deletedOrders.pop();
+        orders.unshift(lastDeletedOrder);
+        $.ajax({
+            url: 'restoreOrder.php',
+            type: 'POST',
+            data: { id: lastDeletedOrder.id },
+            success: function(response) {
+                console.log('Order restored:', response);
                 renderOrders();
-                selectedOrderIndex = orders.length +1 ;
+                selectedOrderIndex = 0;
                 focusOrder(selectedOrderIndex);
-
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
             }
-        }
+        });
+        updateOrderCount();
+    }
+}
+
 
         function focusOrder(index) {
             if (orders.length > 0) {
@@ -240,7 +228,27 @@
             updateDateTime();
            setInterval(updateDateTime, 1000); // Actualiza cada segundo
         });
-         
+       function addOrderNumbering() {
+    const ordersByClient = {};
+
+    // Agrupar pedidos por cliente
+    orders.forEach(order => {
+        if (!ordersByClient[order.cliente]) {
+            ordersByClient[order.cliente] = [];
+        }
+        ordersByClient[order.cliente].push(order);
+    });
+
+    // Numerar pedidos dentro de cada grupo
+    for (const cliente in ordersByClient) {
+        const clientOrders = ordersByClient[cliente];
+        clientOrders.forEach((order, index) => {
+            order.currentOrder = index + 1; // Índice actual (1 basado)
+            order.totalOrders = clientOrders.length; // Total de pedidos
+        });
+    }
+}
+  
  
 
 </script>
