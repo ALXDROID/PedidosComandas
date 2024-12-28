@@ -1,11 +1,12 @@
 <?php
-$servername = "localhost";
-$username = "root";  // Cambia esto si tienes un nombre de usuario diferente
-$password = "";  // Cambia esto si tienes una contraseña
-$dbname = "test3";  // Cambia esto por el nombre de tu base de datos
+$DB_HOST = $_ENV["DB_HOST"];
+$DB_USER = $_ENV["DB_USER"];  // Cambia esto si tienes un nombre de usuario diferente
+$DB_PASSWORD = $_ENV["DB_PASSWORD"];  // Cambia esto si tienes una contraseña
+$DB_NAME = $_ENV["DB_NAME"];
+$DB_PORT = $_ENV["DB_PORT"];     // Cambia esto por el nombre de tu base de datos
 
 // Crear conexión
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($DB_HOST, $DB_USER, $DB_PASSWORD, $DB_NAME, $DB_PORT);
 
 // Verificar conexión
 if ($conn->connect_error) {
