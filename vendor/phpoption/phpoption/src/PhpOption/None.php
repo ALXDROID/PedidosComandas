@@ -114,10 +114,10 @@ final class None extends Option
     {
         return $this;
     }
-
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
-        return new EmptyIterator();
+        return new \EmptyIterator();
     }
 
     public function foldLeft($initialValue, $callable)

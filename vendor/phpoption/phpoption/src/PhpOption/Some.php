@@ -149,10 +149,12 @@ final class Some extends Option
         return $this;
     }
 
-    public function getIterator()
-    {
-        return new ArrayIterator([$this->value]);
-    }
+#[\ReturnTypeWillChange]
+public function getIterator()
+{
+    return new \ArrayIterator($this->value);
+}
+
 
     public function foldLeft($initialValue, $callable)
     {
