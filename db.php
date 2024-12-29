@@ -8,24 +8,22 @@ $DB_PORT = getenv("MYSQLPORT");
 // Crear conexión
 $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASSWORD, $DB_NAME, $DB_PORT);
 
-// Verificar conexión
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    echo json_encode(["error" => "Connection failed: " . $conn->connect_error]);
+    exit;
 }
 
-$sql = "SELECT IDAuto, cantidad, nomCliente, nomProd FROM orden WHERE IDAuto > ? ORDER BY IDAuto ASC";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $lastId);  // Evita inyecciones SQL
-$stmt->execute();
-$result = $stmt->get_result();
+$sql = "SELECT IDAuto, cantidad, nomCliente, nomProd FROM orden";
+$result = $conn->query($sql);
 
 $rows = [];
-while ($row = $result->fetch_assoc()) {
-    $rows[] = $row;
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $rows[] = $row;
+    }
 }
 
-echo json_encode($rows);
-
-$stmt->close();
+echo json_encode($rows); // Devuelve los datos como JSON
 $conn->close();
+
 ?>
