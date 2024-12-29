@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="icon" href="img/logo.png" type="png"/>
-    <title>AJAX MySQL VBA</title>
+    <title>Pedidos Pantalla</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
