@@ -1,9 +1,9 @@
 <?php
-$DB_HOST = $_ENV["DB_HOST"];
-$DB_USER = $_ENV["DB_USER"];  // Cambia esto si tienes un nombre de usuario diferente
-$DB_PASSWORD = $_ENV["DB_PASSWORD"];  // Cambia esto si tienes una contraseña
-$DB_NAME = $_ENV["DB_NAME"];
-$DB_PORT = $_ENV["DB_PORT"];     // Cambia esto por el nombre de tu base de datos
+$DB_HOST = getenv("MYSQLHOST");
+$DB_USER = getenv("MYSQLUSER");
+$DB_PASSWORD = getenv("MYSQLPASSWORD");
+$DB_NAME = getenv("MYSQLDATABASE");
+$DB_PORT = getenv("MYSQLPORT");
 
 // Crear conexión
 $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASSWORD, $DB_NAME, $DB_PORT);
