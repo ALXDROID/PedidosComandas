@@ -1,9 +1,12 @@
-
 <?php
 
 header('Content-Type: application/json');
-$DBURL = "mysql://root:kUfcvmpoRcVdxKgpoioLkbTIxmEizFwt@autorack.proxy.rlwy.net:23890/railway"
+
+// URL de conexión con la base de datos
+$DBURL = "mysql://root:kUfcvmpoRcVdxKgpoioLkbTIxmEizFwt@autorack.proxy.rlwy.net:23890/railway";
 $db = parse_url($DBURL);    
+
+// Extraer datos de la URL de la base de datos
 $host = $db['host'];
 $user = $db['user'];
 $password = $db['pass'];
@@ -15,23 +18,28 @@ $conn = new mysqli($host, $user, $password, $dbname, $port);
 
 // Verificar conexión
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    // Devolver error en formato JSON
+    echo json_encode(array("error" => "Connection failed: " . $conn->connect_error));
+    exit();
 }
 
-// Obtener la última ID de la solicitud
+// Obtener el valor de 'lastId' de la solicitud GET (si existe)
 $lastId = isset($_GET['lastId']) ? (int)$_GET['lastId'] : 0;
 
-// Protegerse contra inyecciones SQL (aunque $lastId ya es un entero, es buena práctica)
-//$lastId = $conn->real_escape_string($lastId);
-
 // Consulta SQL para obtener registros nuevos
-$sql = "SELECT IDAuto, cantidad, nomCliente, nomProd FROM orden WHERE IDAuto > $lastId ORDER BY IDAuto ASC";
-$result = $conn->query($sql);
+$sql = "SELECT IDAuto, cantidad, nomCliente, nomProd FROM orden WHERE IDAuto > ? ORDER BY IDAuto ASC";
+
+// Preparar y ejecutar la consulta
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $lastId); // Usamos 'i' para entero
+$stmt->execute();
+$result = $stmt->get_result();
 
 // Verificar si la consulta se ejecutó correctamente
-// if (!$result) {
-//     die(json_encode(array("error" => "Query failed: " . $conn->error)));
-// }
+if (!$result) {
+    echo json_encode(array("error" => "Query failed: " . $conn->error));
+    exit();
+}
 
 // Preparar el array de resultados
 $rows = array();
