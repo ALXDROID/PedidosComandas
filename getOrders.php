@@ -1,5 +1,5 @@
 <?php
-<<<<<<< HEAD
+
 // Cargar el archivo .env usando la librería dotenv
 require_once __DIR__ . '/vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
@@ -11,21 +11,8 @@ $port = $_ENV['DB_PORT'];
 $user = $_ENV['DB_USER'];
 $password = $_ENV['DB_PASSWORD'];
 $dbname = $_ENV['DB_NAME'];
-=======
 
-header('Content-Type: application/json');
 
-// URL de conexión con la base de datos
-$DBURL = "mysql://root:kUfcvmpoRcVdxKgpoioLkbTIxmEizFwt@autorack.proxy.rlwy.net:23890/railway";
-$db = parse_url($DBURL);    
-
-// Extraer datos de la URL de la base de datos
-$host = $db['host'];
-$user = $db['user'];
-$password = $db['pass'];
-$dbname = ltrim($db['path'], '/');
-$port = $db['port'];
->>>>>>> 60304af99cb97c6bf0a1b3fc28d9d08c170cbc7a
 
 // Establecer la conexión
 $conn = new mysqli($host, $user, $password, $dbname, $port);
