@@ -13,20 +13,19 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Tu consulta SQL (ejemplo)
-$sql = "SELECT IDAuto, cantidad, nomCliente, nomProd FROM orden";
-$result = $conn->query($sql);
+$sql = "SELECT IDAuto, cantidad, nomCliente, nomProd FROM orden WHERE IDAuto > ? ORDER BY IDAuto ASC";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $lastId);  // Evita inyecciones SQL
+$stmt->execute();
+$result = $stmt->get_result();
 
 $rows = [];
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $rows[] = $row;
-    }
-} else {
-    $rows = ["message" => "No results"];
+while ($row = $result->fetch_assoc()) {
+    $rows[] = $row;
 }
 
 echo json_encode($rows);
 
+$stmt->close();
 $conn->close();
 ?>
