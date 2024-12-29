@@ -1,12 +1,16 @@
 <?php
 
-$DBURL = "mysql://root:kUfcvmpoRcVdxKgpoioLkbTIxmEizFwt@autorack.proxy.rlwy.net:23890/railway"
-$db = parse_url($DBURL);    
-$host = $db['host'];
-$user = $db['user'];
-$password = $db['pass'];
-$dbname = ltrim($db['path'], '/');
-$port = $db['port'];
+// Cargar el archivo .env usando la librería dotenv
+require_once __DIR__ . '/vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+// Obtener las credenciales desde las variables de entorno
+$host = $_ENV['DB_HOST'];
+$port = $_ENV['DB_PORT'];
+$user = $_ENV['DB_USER'];
+$password = $_ENV['DB_PASSWORD'];
+$dbname = $_ENV['DB_NAME'];
 
 // Establecer la conexión
 $conn = new mysqli($host, $user, $password, $dbname, $port);
