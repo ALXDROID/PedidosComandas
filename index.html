@@ -129,7 +129,7 @@ function deleteOrder(index) {
     const order = orders.splice(index, 1)[0];
     deletedOrders.push(order);
     $.ajax({
-        url: 'deleteOrder.php',
+        url: '/deleteOrder.php',
         type: 'POST',
         data: { id: order.id },
         success: function(response) {
@@ -156,7 +156,7 @@ function deleteOrder(index) {
         const lastDeletedOrder = deletedOrders.pop();
         orders.unshift(lastDeletedOrder);
         $.ajax({
-            url: 'restoreOrder.php',
+            url: '/restoreOrder.php',
             type: 'POST',
             data: { id: lastDeletedOrder.id },
             success: function(response) {
@@ -189,7 +189,7 @@ function deleteOrder(index) {
 
         function loadOrders() {
             $.ajax({
-                url: 'getOrders.php',
+                url: '/getOrders.php',
                 type: 'GET',
                 data: { lastId: lastOrderId },
                 dataType: 'json',

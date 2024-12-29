@@ -1,5 +1,5 @@
-
 <?php
+<<<<<<< HEAD
 // Cargar el archivo .env usando la librería dotenv
 require_once __DIR__ . '/vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
@@ -11,29 +11,49 @@ $port = $_ENV['DB_PORT'];
 $user = $_ENV['DB_USER'];
 $password = $_ENV['DB_PASSWORD'];
 $dbname = $_ENV['DB_NAME'];
+=======
+
+header('Content-Type: application/json');
+
+// URL de conexión con la base de datos
+$DBURL = "mysql://root:kUfcvmpoRcVdxKgpoioLkbTIxmEizFwt@autorack.proxy.rlwy.net:23890/railway";
+$db = parse_url($DBURL);    
+
+// Extraer datos de la URL de la base de datos
+$host = $db['host'];
+$user = $db['user'];
+$password = $db['pass'];
+$dbname = ltrim($db['path'], '/');
+$port = $db['port'];
+>>>>>>> 60304af99cb97c6bf0a1b3fc28d9d08c170cbc7a
 
 // Establecer la conexión
 $conn = new mysqli($host, $user, $password, $dbname, $port);
 
 // Verificar conexión
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    // Devolver error en formato JSON
+    echo json_encode(array("error" => "Connection failed: " . $conn->connect_error));
+    exit();
 }
 
-// Obtener la última ID de la solicitud
+// Obtener el valor de 'lastId' de la solicitud GET (si existe)
 $lastId = isset($_GET['lastId']) ? (int)$_GET['lastId'] : 0;
 
-// Protegerse contra inyecciones SQL (aunque $lastId ya es un entero, es buena práctica)
-//$lastId = $conn->real_escape_string($lastId);
-
 // Consulta SQL para obtener registros nuevos
-$sql = "SELECT IDAuto, cantidad, nomCliente, nomProd FROM orden WHERE IDAuto > $lastId ORDER BY IDAuto ASC";
-$result = $conn->query($sql);
+$sql = "SELECT IDAuto, cantidad, nomCliente, nomProd FROM orden WHERE IDAuto > ? ORDER BY IDAuto ASC";
+
+// Preparar y ejecutar la consulta
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $lastId); // Usamos 'i' para entero
+$stmt->execute();
+$result = $stmt->get_result();
 
 // Verificar si la consulta se ejecutó correctamente
-// if (!$result) {
-//     die(json_encode(array("error" => "Query failed: " . $conn->error)));
-// }
+if (!$result) {
+    echo json_encode(array("error" => "Query failed: " . $conn->error));
+    exit();
+}
 
 // Preparar el array de resultados
 $rows = array();
