@@ -1,13 +1,15 @@
 
 <?php
-$DB_HOST = getenv("MYSQLHOST");
-$DB_USER = getenv("MYSQLUSER");
-$DB_PASSWORD = getenv("MYSQLPASSWORD");
-$DB_NAME = getenv("MYSQLDATABASE");
-$DB_PORT = getenv("MYSQLPORT");
+$DBURL = "mysql://root:kUfcvmpoRcVdxKgpoioLkbTIxmEizFwt@autorack.proxy.rlwy.net:23890/railway"
+$db = parse_url($DBURL);    
+$host = $db['host'];
+$user = $db['user'];
+$password = $db['pass'];
+$dbname = ltrim($db['path'], '/');
+$port = $db['port'];
 
-// Crear conexión
-$conn = new mysqli($DB_HOST, $DB_USER, $DB_PASSWORD, $DB_NAME, $DB_PORT);
+// Establecer la conexión
+$conn = new mysqli($host, $user, $password, $dbname, $port);
 
 // Verificar conexión
 if ($conn->connect_error) {
