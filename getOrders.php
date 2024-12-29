@@ -1,5 +1,7 @@
 
 <?php
+
+header('Content-Type: application/json');
 $DBURL = "mysql://root:kUfcvmpoRcVdxKgpoioLkbTIxmEizFwt@autorack.proxy.rlwy.net:23890/railway"
 $db = parse_url($DBURL);    
 $host = $db['host'];
