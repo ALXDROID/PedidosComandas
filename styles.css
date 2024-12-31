@@ -134,7 +134,7 @@ max-height:100%;
 
     background-color: #fff;
     border: 4px solid blue;
-
+    transition: transform 0.3s ease;
     border-radius: 8px;
     padding-block-end: auto;
     padding: 10px;
@@ -146,6 +146,11 @@ max-height:100%;
      border: 7px solid yellow;
     outline:none;
 }
+.order-box.swipe-left {
+    transform: translateX(-100%);
+    opacity: 0.5;
+}
+
 .order-box .order-header {
     font-weight: bold;
     /*font-size: 150%;*/

@@ -86,6 +86,7 @@
             <div class="order-time">${formatTime(0)}</div>
         `;
         orderBox.addEventListener('keydown', (event) => handleKeydown(event, index));
+        addTouchEvents(orderBox, index); // Añadir eventos táctiles
         orderList.appendChild(orderBox);
     });
 
@@ -146,6 +147,10 @@ function deleteOrder(index) {
         }
     });
 }
+
+document.getElementById('restoreOrderButton').addEventListener('click', () => {
+    undoDelete();
+});
 
      
 
@@ -246,6 +251,38 @@ function deleteOrder(index) {
         });
     }
 }
+
+function addTouchEvents(orderBox, index) {
+    let startX = 0;
+
+    orderBox.addEventListener('touchstart', (event) => {
+        startX = event.touches[0].clientX;
+    });
+
+    orderBox.addEventListener('touchmove', (event) => {
+        const touch = event.touches[0];
+        const diffX = touch.clientX - startX;
+
+        // Detectar deslizamiento hacia la izquierda
+        if (diffX < -50) {
+            orderBox.classList.add('swipe-left');
+            setTimeout(() => deleteOrder(index), 300);
+            //deleteOrder(index);
+        }
+    });
+
+    orderBox.addEventListener('touchend', () => {
+        // Restaurar posición de la caja si no se eliminó
+        orderBox.style.transform = '';
+    });
+
+    orderBox.addEventListener('click', () => {
+        selectedOrderIndex = index;
+        focusOrder(selectedOrderIndex);
+    });
+}
+
+
   
  
 
@@ -259,6 +296,7 @@ function deleteOrder(index) {
         
     </nav>
     <p id="ordenum">0</p>
+    <button id="restoreOrderButton">Restaurar Último Pedido</button>
     <p id="datetime"></p>
 </div>
     <div class="container" id="container">
