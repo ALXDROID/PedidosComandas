@@ -148,9 +148,9 @@ function deleteOrder(index) {
     });
 }
 
-document.getElementById('restoreOrderButton').addEventListener('click', () => {
-    undoDelete();
-});
+//document.getElementById('restoreOrderButton').addEventListener('click', () => {
+ //   undoDelete();
+//});
 
      
 
