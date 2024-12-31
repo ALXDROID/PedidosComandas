@@ -228,3 +228,33 @@ margin-top:auto;
 margin-left:-70%;
 
 }
+
+/* Arcade-style button */
+#restoreOrderButton {
+    background-color: rgb(251, 0, 255); /* Bright red for arcade-style look */
+    color: #fff; /* White text */
+    border: 3px solid #000; /* Black border for arcade look */
+    border-radius: 50%; /* Makes the button circular */
+    width: 80px; /* Adjust size */
+    height: 80px; /* Adjust size */
+    font-size: 12px; /* Smaller font for a compact look */
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 5px #000; /* Adds depth for an arcade button look */
+    cursor: pointer;
+    outline: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    align-self: center;
+}
+
+/* Hover effect for the button */
+#restoreOrderButton:hover {
+    background-color: #9d00ff; /* Slightly brighter red on hover */
+    transform: scale(1.1); /* Slightly enlarges the button */
+}
+
+/* Pressed effect for the button */
+#restoreOrderButton:active {
+    transform: scale(0.95); /* Shrinks the button a bit */
+    box-shadow: 0 2px #000; /* Reduces shadow to simulate a press */
+}
