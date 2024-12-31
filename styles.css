@@ -21,6 +21,20 @@ max-height:100%;
     /*align-items:center;*/
    
 }
+.restore-btn {
+    background-color: #007BFF; /* Azul llamativo */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.restore-btn:hover {
+    background-color: #0056b3; /* Azul oscuro para hover */
+}
 
 .header{
 

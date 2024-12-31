@@ -148,9 +148,7 @@ function deleteOrder(index) {
     });
 }
 
-//document.getElementById('restoreOrderButton').addEventListener('click', () => {
- //   undoDelete();
-//});
+
 
      
 
@@ -230,6 +228,10 @@ function deleteOrder(index) {
 
             updateDateTime();
            setInterval(updateDateTime, 1000); // Actualiza cada segundo
+              // Asignar evento al botón de restaurar
+    document.getElementById('restoreOrderButton').addEventListener('click', () => {
+        undoDelete();
+    });
         });
        function addOrderNumbering() {
     const ordersByClient = {};
@@ -295,6 +297,7 @@ function addTouchEvents(orderBox, index) {
         <a href="#" >Pantalla Pedidos</a>
         
     </nav>
+    <button id="restoreOrderButton">Restaurar Último Pedido</button>
     <p id="ordenum">0</p>
      <!-- <button id="restoreOrderButton">Restaurar Último Pedido</button>  -->
     <p id="datetime"></p>
