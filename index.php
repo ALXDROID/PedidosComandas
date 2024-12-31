@@ -98,10 +98,11 @@
     phantomOrder.textContent = 'Sin órdenes';
     orderList.appendChild(phantomOrder);
 
-    if (orders.length === 0) {
-        phantomOrder.focus();
+    if (orders.length > 0) {
+        selectedOrderIndex = 0; // Asegurar que el índice seleccionado sea el primero
+        focusOrder(selectedOrderIndex); // Enfocar el primer pedido
     } else {
-        focusOrder(selectedOrderIndex);
+        phantomOrder.focus();
     }
 }
 
@@ -256,9 +257,12 @@ function deleteOrder(index) {
 
 function addTouchEvents(orderBox, index) {
     let startX = 0;
+    let hasSwiped = false; // Evitar múltiples eliminaciones
+
 
     orderBox.addEventListener('touchstart', (event) => {
         startX = event.touches[0].clientX;
+        hasSwiped = false; // Reiniciar en cada toque
     });
 
     orderBox.addEventListener('touchmove', (event) => {
@@ -266,10 +270,10 @@ function addTouchEvents(orderBox, index) {
         const diffX = touch.clientX - startX;
 
         // Detectar deslizamiento hacia la izquierda
-        if (diffX < -50) {
+        if (diffX < -50 && !hasSwiped) {
+            hasSwiped = true; // Evitar múltiples eliminaciones
             orderBox.classList.add('swipe-left');
             setTimeout(() => deleteOrder(index), 300);
-            //deleteOrder(index);
         }
     });
 
