@@ -296,7 +296,7 @@ function addTouchEvents(orderBox, index) {
         
     </nav>
     <p id="ordenum">0</p>
-    <button id="restoreOrderButton">Restaurar Último Pedido</button>
+    //<button id="restoreOrderButton">Restaurar Último Pedido</button>
     <p id="datetime"></p>
 </div>
     <div class="container" id="container">
