@@ -14,7 +14,7 @@ $dbname = $_ENV['DB_NAME'];
 
 
 
-// Establecer la conexión
+
 $conn = new mysqli($host, $user, $password, $dbname, $port);
 
 // Verificar conexión

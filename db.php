@@ -12,7 +12,7 @@ $user = $_ENV['DB_USER'];
 $password = $_ENV['DB_PASSWORD'];
 $dbname = $_ENV['DB_NAME'];
 
-// Establecer la conexión
+// Establecer la conexió
 $conn = new mysqli($host, $user, $password, $dbname, $port);
 
 if ($conn->connect_error) {
