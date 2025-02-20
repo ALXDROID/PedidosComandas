@@ -12,15 +12,13 @@ $user = $_ENV['DB_USER'];
 $password = $_ENV['DB_PASSWORD'];
 $dbname = $_ENV['DB_NAME'];
 
-
-
-// Establecer la conexión
-$conn = new mysqli($host, $user, $password, $dbname, $port);
-
-// Verificar conexión
-if ($conn->connect_error) {
-    // Devolver error en formato JSON
-    echo json_encode(array("error" => "Connection failed: " . $conn->connect_error));
+// Establecer la conexión a PostgreSQL usando PDO
+$dsn = "pgsql:host=$host;port=$port;dbname=$dbname;";
+try {
+    $conn = new PDO($dsn, $user, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo json_encode(array("error" => "Connection failed: " . $e->getMessage()));
     exit();
 }
 
@@ -28,33 +26,24 @@ if ($conn->connect_error) {
 $lastId = isset($_GET['lastId']) ? (int)$_GET['lastId'] : 0;
 
 // Consulta SQL para obtener registros nuevos
-$sql = "SELECT IDAuto, cantidad, nomCliente, nomProd FROM orden WHERE IDAuto > ? ORDER BY IDAuto ASC";
+$sql = "SELECT IDAuto, cantidad, nomCliente, nomProd FROM orden WHERE IDAuto > :lastId ORDER BY IDAuto ASC";
 
 // Preparar y ejecutar la consulta
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $lastId); // Usamos 'i' para entero
+$stmt->bindParam(':lastId', $lastId, PDO::PARAM_INT);
 $stmt->execute();
-$result = $stmt->get_result();
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Verificar si la consulta se ejecutó correctamente
-if (!$result) {
-    echo json_encode(array("error" => "Query failed: " . $conn->error));
-    exit();
-}
-
-// Preparar el array de resultados
-$rows = array();
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $rows[] = $row;
-    }
+// Verificar si hay resultados
+if ($result) {
+    // Convertir a JSON y mostrar los resultados
+    echo json_encode($result);
 } else {
-    $rows = array("message" => "0 results");
+    echo json_encode(array("message" => "0 results"));
 }
-
-// Convertir a JSON y mostrar los resultados
-echo json_encode($rows);
 
 // Cerrar la conexión
-$conn->close();
+$conn = null;
+
 ?>
+
