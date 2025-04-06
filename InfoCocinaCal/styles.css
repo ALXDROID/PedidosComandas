@@ -1,0 +1,261 @@
+body {
+    font-family: Arial, sans-serif;
+    /*display: flex;
+    justify-content: center;
+    align-items: center;*/
+       display: flex;
+    justify-content: start;
+    align-items: start;
+    height: 100vh;
+    margin: 0;
+    background-color: lightYellow;
+}
+.pantalla{
+     display:flex;
+    flex-direction: column;
+    width:100%;
+    max-width:100%;
+    height: 100%;
+max-height:100%;
+    /*overflow:hidden;*/
+    /*align-items:center;*/
+   
+}
+.restore-btn {
+    background-color: #007BFF; /* Azul llamativo */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.restore-btn:hover {
+    background-color: #0056b3; /* Azul oscuro para hover */
+}
+
+.header{
+
+    background-color: white;
+    width: 100%;
+    max-width: 100%;
+      max-height:100%;
+   /* margin:5px 0px 5px 0px;*/ /*up-left-bottom-righy*/
+   margin:auto;
+    font-size: 28px;
+    padding:0px;
+    /*text-align: center;*/
+    color: blue;
+    text-transform:uppercase; 
+     display: flex;
+  /*justify-content: center;*/
+ /* align-items: center;*/
+
+  border: 10px solid cyan;
+}
+.header .logo {
+    padding-left: 10px;
+    
+    align-content: center;
+    float:left;
+
+}
+.phantom-order {
+    display: none;
+}
+
+.logo img{
+
+   max-width: 100%;
+   height: 100%;
+  height: 100%;
+}
+ .header p{
+    font-weight:bold;
+   align-content: center;
+   padding:0% 0% 0% 5%; /*superior,derecho,inferior,izq*/
+   /* float:right;*/
+ 
+}
+.header nav {
+  padding:0% 33% 0% 3%; /*superior,derecho,inferior,izq*/
+   align-content: center;
+  /*line-height:80px;*/
+
+}
+ 
+.header nav  a {
+  display:inline-block;
+  color:darkblue;
+  text-decoration:none;
+  align-items: center;
+  line-height:normal;
+  font-size:28px;
+  font-weight:bold;
+  -webkit-transition:all 500ms ease;
+  -o-transition:all 500ms ease;
+  transition:all 500ms ease;
+}
+@media screen and (max-width: 1366px) {
+    .header{
+       align-content: center;
+    }
+    .header nav{
+     padding:0% 17% 1% 3%;
+      align-content: center;
+
+    }
+    .header nav a {
+     
+        font-size: 17px;
+        font-weight:bold;
+         /* Ajusta este valor según tus necesidades */
+    }
+    .header p{
+        font-size: 17px;
+        font-weight:bold;
+         align-content: center;
+    }
+}
+.container {
+    width: 99%;
+     height: 99%;
+    max-width: 100%;
+      max-height:100%;
+  /*  margin:5px 0 0 0;*/
+   
+    padding:10px ;
+    /*margin-bottom: 0;
+    margin-top:7%;*/
+     /*background-color:lightblue;*/
+     display:block;
+
+     position:relative;
+}
+
+.order-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(300px, 1fr));
+    gap: 20px;
+     overflow-wrap:break-word;
+     font-size: 1.5em;
+ 
+}
+
+.order-box {
+
+    background-color: #fff;
+    border: 5px solid blue;
+    
+    border-radius: 8px;
+    padding-block-end: auto;
+    padding: 10px;
+    position: relative;
+    transition: background-color 1s, transform 1s ease;
+
+}  
+.order-box:focus {
+    
+    border: 9px solid yellow;
+    outline:none;
+}
+.order-box.swipe-left {
+    transform: translateX(-100%);
+    opacity: 0.5;
+}
+
+.order-box .order-header {
+    font-weight: normal;
+    font-size: 150%;
+    /*padding-bottom: 10px;*/
+    top: 0;
+    padding : 0;
+}
+
+.order-box .order-progress{
+font-weight: bold;
+    font-size: 100%;
+    /*padding-bottom: 10px;*/
+    top: 0;
+    right: 0;
+    padding-top: 10px;
+
+}
+.order-box .order-details{
+text-transform:uppercase; 
+font-size: 1.5em;
+}
+.order-box .order-time {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    font-size: 1.5em;
+    font-weight: bold;
+   color:red;
+}
+.order-box .order-count {
+    position: relative;
+    padding: 0px ;
+    padding-bottom: 10px;
+    /*top: 0;*/
+    position: right;
+    font-size: 1.5em;
+    font-weight: bold;
+   color:blue;
+}
+
+.order-box.yellow {
+    background-color: #fffacd;
+}
+
+.order-box.red {
+    background-color: #f08080;
+}
+
+
+#ache1{
+    display:block;
+position:inline-block;
+margin-top:auto;
+margin-right:80%;
+}
+
+#data{
+    display:block;
+position:inline-block;
+margin-top:auto;
+margin-left:-70%;
+
+}
+
+/* Arcade-style button */
+#restoreOrderButton {
+    background-color: rgb(228, 212, 26); /* Bright red for arcade-style look */
+    color: #B21; /* White text */
+    border: 3px solid #000; /* Black border for arcade look */
+    border-radius: 50%; /* Makes the button circular */
+    width: 80px; /* Adjust size */
+    height: 80px; /* Adjust size */
+    font-size: 12px; /* Smaller font for a compact look */
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 5px #000; /* Adds depth for an arcade button look */
+    cursor: pointer;
+    outline: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    align-self: center;
+}
+
+/* Hover effect for the button */
+#restoreOrderButton:hover {
+    background-color: #9d00ff; /* Slightly brighter red on hover */
+    transform: scale(1.1); /* Slightly enlarges the button */
+}
+
+/* Pressed effect for the button */
+#restoreOrderButton:active {
+    transform: scale(0.95); /* Shrinks the button a bit */
+    box-shadow: 0 2px #000; /* Reduces shadow to simulate a press */
+}

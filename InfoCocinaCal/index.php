@@ -4,18 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="icon" href="img/logo.png" type="png"/>
-    <title>Pedidos Pantalla.</title>
+    <link rel="icon" href="img/pleto.png" type="png"/>
+    <title>INFOSCREEN</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 
 
+
     
 <script>
 
-
+//header('Access-Control-Allow-Origin: *');  // Permite solicitudes desde cualquier origen
         let orders = [];
         let deletedOrders = [];
         let selectedOrderIndex = 0;
@@ -129,7 +130,7 @@ function deleteOrder(index) {
     const order = orders.splice(index, 1)[0];
     deletedOrders.push(order);
     $.ajax({
-        url: '/deleteOrder.php',
+        url: 'deleteOrder.php',
         type: 'POST',
         data: { id: order.id },
         success: function(response) {
@@ -158,7 +159,7 @@ function deleteOrder(index) {
         const lastDeletedOrder = deletedOrders.pop();
         orders.unshift(lastDeletedOrder);
         $.ajax({
-            url: '/restoreOrder.php',
+            url: 'restoreOrder.php',
             type: 'POST',
             data: { id: lastDeletedOrder.id },
             success: function(response) {
@@ -191,7 +192,7 @@ function deleteOrder(index) {
 
         function loadOrders() {
             $.ajax({
-                url: '/getOrders.php',
+                url: 'getOrders.php',
                 type: 'GET',
                 data: { lastId: lastOrderId },
                 dataType: 'json',
@@ -295,7 +296,7 @@ function addTouchEvents(orderBox, index) {
 </script>
     <div class="pantalla">
     <div class="header">
-        <div class="logo"><img src="img/logo.png" alt="logo"></div>
+        <div class="logo"><img src="img/pleto.png" alt="logo"></div>
         
     <nav>
         <a href="#" >Pantalla Pedidos</a>

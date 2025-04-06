@@ -1,0 +1,114 @@
+<?php
+
+// Cargar el archivo .env usando la librería dotenv (si usas variables de entorno)
+///require_once __DIR__ . '/vendor/autoload.php'; // Asegúrate de que el autoload de Composer esté correcto
+//$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+//$dotenv->load();
+
+// Obtener las credenciales desde las variables de entorno (si decides usar dotenv)
+// Descomenta las siguientes líneas si utilizas el archivo .env:
+// $host = $_ENV['DB_HOST'];
+// $port = $_ENV['DB_PORT'];  // Deberías tener el puerto correcto (por defecto 3306 para MySQL)
+// $user = $_ENV['DB_USER'];
+// $password = $_ENV['DB_PASSWORD'];
+// $dbname = $_ENV['DB_NAME'];
+
+// Conexión directa sin dotenv
+$host = "localhost";
+$port = "3306";   // El puerto de MySQL por defecto
+$user = "root";    // Usuario por defecto en XAMPP
+$password = "";    // Deja vacío si no tienes contraseña, o ponla si la configuraste
+$dbname = "puntosystem";
+
+// Establecer la conexión a MySQL usando PDO
+$dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8";  // Se agrega 'charset=utf8' para evitar problemas con caracteres especiales
+
+try {
+    $conn = new PDO($dsn, $user, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);  // Esto permite ver los errores de SQL
+} catch (PDOException $e) {
+    echo json_encode(array("error" => "Connection failed: " . $e->getMessage()));
+    exit();  // Detiene la ejecución si no se puede conectar
+}
+
+// Obtener el valor de 'lastId' de la solicitud GET (si existe)
+$lastId = isset($_GET['lastId']) ? (int)$_GET['lastId'] : 0;  // Convertir a entero, con valor predeterminado de 0
+
+// Consulta SQL para obtener registros nuevos desde el último ID
+$sql = "SELECT IDAuto, cantidad, nomCliente, nomProd FROM orden WHERE IDAuto > :lastId ORDER BY IDAuto ASC";
+
+// Preparar y ejecutar la consulta
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(':lastId', $lastId, PDO::PARAM_INT);  // Vincula el parámetro lastId
+$stmt->execute();  // Ejecuta la consulta
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);  // Obtener los resultados en un arreglo asociativo
+
+// Verificar si hay resultados y devolverlos en formato JSON
+if ($result) {
+    echo json_encode($result);  // Si hay resultados, devolverlos como JSON
+} else {
+    echo json_encode(array("message" => "0 results"));  // Si no hay resultados, enviar mensaje
+}
+
+// Cerrar la conexión
+$conn = null;
+
+?>
+
+
+
+
+<!-- 
+
+// Cargar el archivo .env usando la librería dotenv
+/* require_once __DIR__ . '/vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+// Obtener las credenciales desde las variables de entorno
+$host = $_ENV['DB_HOST'];
+$port = $_ENV['DB_PORT'];  // Deberías tener el puerto correcto (por defecto 3306 para MySQL)
+$user = $_ENV['DB_USER'];
+$password = $_ENV['DB_PASSWORD'];
+$dbname = $_ENV['DB_NAME']; */
+$host = 'localhost';
+$port = '3306';
+$user = 'root';
+$password = '';
+$dbname = 'puntosystem';
+// Establecer la conexión a MySQL usando PDO
+$dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8";  // Cambio a mysql y se agrega charset para evitar problemas con caracteres
+
+try {
+    $conn = new PDO($dsn, $user, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo json_encode(array("error" => "Connection failed: " . $e->getMessage()));
+    exit();
+}
+
+// Obtener el valor de 'lastId' de la solicitud GET (si existe)
+$lastId = isset($_GET['lastId']) ? (int)$_GET['lastId'] : 0;
+
+// Consulta SQL para obtener registros nuevos
+$sql = "SELECT IDAuto, cantidad, nomCliente, nomProd FROM orden WHERE IDAuto > :lastId ORDER BY IDAuto ASC";
+
+// Preparar y ejecutar la consulta
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(':lastId', $lastId, PDO::PARAM_INT);
+$stmt->execute();
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Verificar si hay resultados
+if ($result) {
+    // Convertir a JSON y mostrar los resultados
+    echo json_encode($result);
+} else {
+    echo json_encode(array("message" => "0 results"));
+}
+
+// Cerrar la conexión
+$conn = null;
+
+?>
+ -->
